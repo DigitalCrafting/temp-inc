@@ -1,6 +1,13 @@
 # Temp-Inc
 'Always Right Temp Inc' temperature anomalies solution 
 
+## Assumptions
+
+1. It makes sense to divide measurements by roomId.
+2. We do not store all the measurements, only the anomalies.
+3. All the measurements are only stored as long as they are required to calculate the anomaly.
+4. For this simple application, I assume the temperature-detector will receive 1 reading at a time.
+
 ## Recruitment Task Description
 
 Introducing 'Always Right Temp Inc' 🌡️🌞, the masters of temperature sensors! They've entrusted you to create an anomaly detector.

@@ -27,10 +27,20 @@ public class TemperatureMeasurementsListenerTest extends AbstractIntegrationTest
                      kafkaContainer.getBootstrapServers(),
                      inputTopic
              )) {
-            TemperatureReading temperatureReading = new TemperatureReading(20d, "room", "thermometer", Instant.parse("2023-01-01T00:00:00.000Z"));
-            producer.produce(temperatureReading.thermometerId(), temperatureReading);
+
+            TemperatureReading temperatureReading;
+            Instant time = Instant.now();
+            for (int i = 0; i < 10; i++) {
+                time = time.plusSeconds(1);
+                if (i == 5) {
+                    temperatureReading = new TemperatureReading(27d, "room", "thermometer5", time);
+                } else {
+                    temperatureReading = new TemperatureReading(20d, "room", "thermometer" + i, time);
+                }
+                producer.produce(temperatureReading.thermometerId(), temperatureReading);
+            }
             consumer.drain(
-                    consumerRecords -> consumerRecords.stream().anyMatch(r -> r.value().thermometerId().equals(temperatureReading.thermometerId())),
+                    consumerRecords -> consumerRecords.stream().anyMatch(r -> r.value().thermometerId().equals("thermometer5")),
                     Duration.ofSeconds(5)
             );
         }
