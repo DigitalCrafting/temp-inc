@@ -1,5 +1,6 @@
 package io.kontak.apps.analytics.api.analytics;
 
+import io.kontak.apps.anomaly.storage.AnomaliesMapper;
 import io.kontak.apps.event.Anomaly;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,11 +9,27 @@ import java.util.List;
 
 @Service
 class AnalyticsControllerService {
+    private final AnomaliesMapper mapper;
+
+    public AnalyticsControllerService(AnomaliesMapper mapper) {
+        this.mapper = mapper;
+    }
+
     List<Anomaly> getAnomaliesPerRoom(@PathVariable("roomId") final String roomId) {
-        return null;
+        List<Anomaly> anomalies = mapper.getByRoomId(roomId).stream()
+                .map(AnomaliesConverter::convert)
+                .toList();
+        return anomalies;
     }
 
     List<Anomaly> getAnomaliesPerThermometer(@PathVariable("thermometerId") final String thermometerId) {
-        return null;
+        List<Anomaly> anomalies = mapper.getByThermometerId(thermometerId).stream()
+                .map(AnomaliesConverter::convert)
+                .toList();
+        return anomalies;
+    }
+
+    public List<String> getThermometerOverAnomalyThreshold(Integer threshold) {
+        return mapper.getThermometersWithAnomaliesAboveThreshold(threshold);
     }
 }

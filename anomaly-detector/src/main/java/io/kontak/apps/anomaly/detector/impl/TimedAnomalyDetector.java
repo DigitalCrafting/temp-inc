@@ -1,6 +1,7 @@
 package io.kontak.apps.anomaly.detector.impl;
 
 import io.kontak.apps.anomaly.detector.AnomalyDetector;
+import io.kontak.apps.anomaly.detector.storage.AnomaliesDatabaseService;
 import io.kontak.apps.anomaly.detector.tempStorage.TimedTempReadingsStorage;
 import io.kontak.apps.anomaly.detector.utils.AnomalyDetectorUtils;
 import io.kontak.apps.event.Anomaly;
@@ -17,12 +18,14 @@ public class TimedAnomalyDetector implements AnomalyDetector {
 
     private final double tempDiffThreshold;
     private final TimedTempReadingsStorage storage;
+    private final AnomaliesDatabaseService databaseService;
 
     public TimedAnomalyDetector(
             @Value("${io.kontak.anomaly.detector.timed.temperatureDifference.threshold:5}")
-            double tempDiffThreshold, TimedTempReadingsStorage storage) {
+            double tempDiffThreshold, TimedTempReadingsStorage storage, AnomaliesDatabaseService databaseService) {
         this.tempDiffThreshold = tempDiffThreshold;
         this.storage = storage;
+        this.databaseService = databaseService;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class TimedAnomalyDetector implements AnomalyDetector {
             potentialAnomaly.ifPresent(anomalies::add);
         }
         if (!anomalies.isEmpty()) {
-            // TODO store anomalies
+            anomalies.forEach(databaseService::saveAnomaly);
             return Optional.of(anomalies.get(0));
         }
         return Optional.empty();

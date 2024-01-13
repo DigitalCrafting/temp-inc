@@ -1,17 +1,21 @@
 package io.kontak.apps.anomaly.detector.impl;
 
+import io.kontak.apps.anomaly.detector.storage.AnomaliesDatabaseService;
 import io.kontak.apps.anomaly.detector.tempStorage.QuantitativeTempReadingsStorage;
 import io.kontak.apps.anomaly.detector.tempStorage.TimedTempReadingsStorage;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 
 public class TimedAnomalyDetectorTest {
 
@@ -19,8 +23,10 @@ public class TimedAnomalyDetectorTest {
 
     @BeforeEach
     void setUp() {
+        AnomaliesDatabaseService databaseService = Mockito.mock(AnomaliesDatabaseService.class);
+        doNothing().when(databaseService).saveAnomaly(any());
         TimedTempReadingsStorage storage = new TimedTempReadingsStorage(5);
-        detector = new TimedAnomalyDetector(5, storage);
+        detector = new TimedAnomalyDetector(5, storage, databaseService);
 
         TemperatureReading temperatureReading_1 = new TemperatureReading(20d, "room", "thermometer_1", Instant.parse("2023-01-01T00:00:00.000Z"));
         TemperatureReading temperatureReading_2 = new TemperatureReading(20d, "room", "thermometer_2", Instant.parse("2023-01-01T00:00:01.000Z"));

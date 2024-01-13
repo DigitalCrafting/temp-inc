@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.kontak.apps.anomaly.storage.AnomaliesMapper">
+    <resultMap id="AnomalyEntityMap" type="io.kontak.apps.anomaly.storage.AnomalyEntity">
+    </resultMap>
+
+    <insert id="insert" parameterType="io.kontak.apps.anomaly.storage.AnomalyEntity">
+        INSERT INTO detected_anomalies (temperature, roomId, thermometerId, "timestamp")
+        VALUES (#{temperature}, #{roomId}, #{thermometerId}, #{timestamp})
+    </insert>
+
+    <select id="getByRoomId" parameterType="java.lang.String" resultMap="AnomalyEntityMap">
+        SELECT * FROM detected_anomalies WHERE roomId = #{roomId}
+    </select>
+
+    <select id="getByThermometerId" parameterType="java.lang.String" resultMap="AnomalyEntityMap">
+        SELECT * FROM detected_anomalies WHERE thermometerId = #{thermometerId}
+    </select>
+
+    <select id="getThermometersWithAnomaliesAboveThreshold" parameterType="java.lang.Integer" resultMap="java.lang.String">
+        SELECT thermometerId FROM detected_anomalies group by thermometerId HAVING count(*) > #{threshold}
+    </select>
+</mapper>

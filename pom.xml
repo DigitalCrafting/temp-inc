@@ -20,6 +20,7 @@
 		<module>temperature-generator</module>
 		<module>anomaly-detector</module>
 		<module>anomaly-storage</module>
+		<module>anomaly-schema</module>
 		<module>temperature-analytics-api</module>
 		<module>temperature-domain</module>
 	</modules>
@@ -81,6 +82,11 @@
 			<dependency>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-core</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>2.1.0</version>
 			</dependency>
 
 			<dependency>

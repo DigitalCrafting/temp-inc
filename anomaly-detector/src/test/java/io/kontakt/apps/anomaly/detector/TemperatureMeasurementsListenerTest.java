@@ -1,12 +1,17 @@
 package io.kontakt.apps.anomaly.detector;
 
+import io.kontak.apps.anomaly.detector.storage.AnomaliesDatabaseService;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.Duration;
 import java.time.Instant;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 
 public class TemperatureMeasurementsListenerTest extends AbstractIntegrationTest {
 
@@ -16,8 +21,13 @@ public class TemperatureMeasurementsListenerTest extends AbstractIntegrationTest
     @Value("${spring.cloud.stream.bindings.anomalyDetectorProcessor-out-0.destination}")
     private String outputTopic;
 
+    @MockBean
+    private AnomaliesDatabaseService databaseService;
+
     @Test
     void testInOutFlow() {
+        doNothing().when(databaseService).saveAnomaly(any());
+
         try (TestKafkaConsumer<Anomaly> consumer = new TestKafkaConsumer<>(
                 kafkaContainer.getBootstrapServers(),
                 outputTopic,

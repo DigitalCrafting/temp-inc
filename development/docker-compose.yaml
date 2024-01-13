@@ -38,3 +38,15 @@ services:
       - 8085:9000
     environment:
       KAFKA_BROKERCONNECT: broker-temp-task:9092
+
+  anomalies-db:
+    image: postgres:14.0-alpine
+    container_name: anomalies-db
+    environment:
+      POSTGRES_DB: anomalies_db
+      POSTGRES_USER: anomalies_user
+      POSTGRES_PASSWORD: anomalies_pass
+    ports:
+      - "2345:5432"
+    volumes:
+      - ./database/data-dump/volume:/var/lib/postgresql/data/
