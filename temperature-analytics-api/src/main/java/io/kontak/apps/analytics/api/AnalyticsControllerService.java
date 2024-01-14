@@ -1,4 +1,4 @@
-package io.kontak.apps.analytics.api.analytics;
+package io.kontak.apps.analytics.api;
 
 import io.kontak.apps.anomaly.storage.AnomaliesMapper;
 import io.kontak.apps.event.Anomaly;
