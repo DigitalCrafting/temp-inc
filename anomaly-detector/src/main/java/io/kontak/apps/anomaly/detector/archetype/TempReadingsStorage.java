@@ -1,4 +1,4 @@
-package io.kontak.apps.anomaly.detector.tempStorage;
+package io.kontak.apps.anomaly.detector.archetype;
 
 import io.kontak.apps.event.TemperatureReading;
 

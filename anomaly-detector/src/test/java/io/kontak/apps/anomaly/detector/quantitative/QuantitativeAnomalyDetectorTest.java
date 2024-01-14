@@ -1,7 +1,8 @@
-package io.kontak.apps.anomaly.detector.impl;
+package io.kontak.apps.anomaly.detector.quantitative;
 
+import io.kontak.apps.anomaly.detector.quantitative.QuantitativeAnomalyDetector;
 import io.kontak.apps.anomaly.detector.storage.AnomaliesDatabaseService;
-import io.kontak.apps.anomaly.detector.tempStorage.QuantitativeTempReadingsStorage;
+import io.kontak.apps.anomaly.detector.quantitative.QuantitativeTempReadingsStorage;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
 import org.junit.jupiter.api.BeforeEach;

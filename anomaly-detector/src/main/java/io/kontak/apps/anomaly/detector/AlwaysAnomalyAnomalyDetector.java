@@ -1,6 +1,6 @@
-package io.kontak.apps.anomaly.detector.impl;
+package io.kontak.apps.anomaly.detector;
 
-import io.kontak.apps.anomaly.detector.AnomalyDetector;
+import io.kontak.apps.anomaly.detector.archetype.AnomalyDetector;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
 import org.springframework.context.annotation.Primary;

@@ -1,8 +1,7 @@
-package io.kontak.apps.anomaly.detector.impl;
+package io.kontak.apps.anomaly.detector.timed;
 
-import io.kontak.apps.anomaly.detector.AnomalyDetector;
+import io.kontak.apps.anomaly.detector.archetype.AnomalyDetector;
 import io.kontak.apps.anomaly.detector.storage.AnomaliesDatabaseService;
-import io.kontak.apps.anomaly.detector.tempStorage.QuantitativeTempReadingsStorage;
 import io.kontak.apps.anomaly.detector.utils.AnomalyDetectorUtils;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
@@ -14,22 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class QuantitativeAnomalyDetector implements AnomalyDetector {
+public class TimedAnomalyDetector implements AnomalyDetector {
 
     private final double tempDiffThreshold;
-    private final int storageThreshold;
-    private final QuantitativeTempReadingsStorage storage;
+    private final TimedTempReadingsStorage storage;
     private final AnomaliesDatabaseService databaseService;
 
-    public QuantitativeAnomalyDetector(
-            @Value("${io.kontak.anomaly.detector.quantitative.temperatureDifference.threshold:5}")
-            double tempDiffThreshold,
-            @Value("${io.kontak.anomaly.detector.quantitative.storage.threshold:10}")
-            int storageThreshold,
-            QuantitativeTempReadingsStorage storage,
-            AnomaliesDatabaseService databaseService) {
+    public TimedAnomalyDetector(
+            @Value("${io.kontak.anomaly.detector.timed.temperatureDifference.threshold:5}")
+            double tempDiffThreshold, TimedTempReadingsStorage storage, AnomaliesDatabaseService databaseService) {
         this.tempDiffThreshold = tempDiffThreshold;
-        this.storageThreshold = storageThreshold;
         this.storage = storage;
         this.databaseService = databaseService;
     }
@@ -42,25 +35,25 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
     }
 
     /**
-     * within any 10 consecutive measurements, one reading
-     * is higher than the average of the remaining 9 by 5 degrees Celsius.
+     * Define an anomaly as any measurement that differs from the average of all readings by 5 degrees Celsius
+     * within a 10-second window based on the measurement timestamp.
      * <p>
-     * When there is less than 10 readings, we do nothing.
+     * Storage takes care of the time window.
      * <p>
-     * There will never be more than 10, storage takes care of that.
+     * This time we do not have size constraint but there is no point in measuring average of less than 5 elements,
+     * so I'm using 5 as a minimum size. Depending on the requirements, this can be adjusted.
+     * <p>
+     * We could, for example, check if the time difference between first and last reading is 10s,
+     * but it could be *almost* 10s and since this is recruitment task, I'm going to simplify things a bit.
      */
     private Optional<Anomaly> detectAnomalies(List<TemperatureReading> roomReadings) {
-        if (roomReadings.size() < storageThreshold) {
+        if (roomReadings.size() < 5) {
             return Optional.empty();
         }
 
         List<Anomaly> anomalies = new ArrayList<>();
         for (TemperatureReading current : roomReadings) {
-            List<TemperatureReading> otherReadings = roomReadings.stream().filter(
-                    r -> !r.equals(current)
-            ).toList();
-
-            Optional<Anomaly> potentialAnomaly = AnomalyDetectorUtils.isAnomaly(current, otherReadings, tempDiffThreshold);
+            Optional<Anomaly> potentialAnomaly = AnomalyDetectorUtils.isAnomaly(current, roomReadings, tempDiffThreshold);
             potentialAnomaly.ifPresent(anomalies::add);
         }
         if (!anomalies.isEmpty()) {

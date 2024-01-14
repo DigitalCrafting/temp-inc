@@ -1,5 +1,7 @@
-package io.kontak.apps.anomaly.detector.tempStorage;
+package io.kontak.apps.anomaly.detector.timed;
 
+import io.kontak.apps.anomaly.detector.archetype.TempReadingsStorage;
+import io.kontak.apps.anomaly.detector.timed.TimedTempReadingsStorage;
 import io.kontak.apps.event.TemperatureReading;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
