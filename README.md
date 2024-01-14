@@ -6,7 +6,14 @@
 1. It makes sense to divide measurements by roomId.
 2. We do not store all the measurements, only the anomalies.
 3. All the measurements are only stored as long as they are required to calculate the anomaly.
-4. For this simple application, I assume the temperature-detector will receive 1 reading at a time.
+
+## How to run
+
+1. `mvn clean install` on the whole project
+2. Run `docker-compose up` in `development` directory
+3. Run `mvn flyway migrate` in `anomaly-schema`
+4. Run the services: temperature-generator, anomaly-detector (remember to set profile) and temperature-analytics-api
+5. You can test temperature-analytics-api on http://localhost:8080/swagger-ui/index.html 
 
 ## Recruitment Task Description
 
