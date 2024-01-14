@@ -27,6 +27,12 @@ public class AnalyticsController {
     }
 
     @ResponseBody
+    @GetMapping("/rooms/{roomId}/thermometers")
+    public List<String> getThermometersForRoom(@PathVariable("roomId") final String roomId) {
+        return service.getThermometersForRoom(roomId);
+    }
+
+    @ResponseBody
     @GetMapping("/thermometers/{thermometerId}")
     public List<Anomaly> getAnomaliesPerThermometer(@PathVariable("thermometerId") final String thermometerId) {
         return service.getAnomaliesPerThermometer(thermometerId);

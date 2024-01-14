@@ -26,4 +26,8 @@
     <select id="getRoomsWithAnomalies" resultType="java.lang.String">
         SELECT DISTINCT roomId FROM detected_anomalies
     </select>
+
+    <select id="getThermometersForRoom" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT DISTINCT thermometerId FROM detected_anomalies WHERE roomId = #{roomId}
+    </select>
 </mapper>

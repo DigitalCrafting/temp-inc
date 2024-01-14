@@ -36,4 +36,8 @@ class AnalyticsControllerService {
     public List<String> getRoomsWithAnomalies() {
         return mapper.getRoomsWithAnomalies();
     }
+
+    public List<String> getThermometersForRoom(String roomId) {
+        return mapper.getThermometersForRoom(roomId);
+    }
 }
