@@ -1,4 +1,4 @@
-package io.kontakt.apps.anomaly.detector;
+package io.kontak.apps.anomaly.detector;
 
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;

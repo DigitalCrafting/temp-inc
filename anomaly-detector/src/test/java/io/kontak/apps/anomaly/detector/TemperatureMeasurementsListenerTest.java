@@ -1,4 +1,4 @@
-package io.kontakt.apps.anomaly.detector;
+package io.kontak.apps.anomaly.detector;
 
 import io.kontak.apps.anomaly.detector.storage.AnomaliesDatabaseService;
 import io.kontak.apps.event.Anomaly;

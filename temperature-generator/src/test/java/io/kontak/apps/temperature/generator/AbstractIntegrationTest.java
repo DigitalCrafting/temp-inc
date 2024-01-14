@@ -1,6 +1,5 @@
-package io.kontakt.apps.anomaly.detector;
+package io.kontak.apps.temperature.generator;
 
-import io.kontak.apps.anomaly.detector.AnomalyDetectorApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -8,7 +7,7 @@ import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-@SpringBootTest(classes = AnomalyDetectorApplication.class)
+@SpringBootTest(classes = TemperatureGeneratorApplication.class)
 @Testcontainers
 public class AbstractIntegrationTest {
 
@@ -21,7 +20,7 @@ public class AbstractIntegrationTest {
 
     @DynamicPropertySource
     static void datasourceConfig(DynamicPropertyRegistry registry) {
-        registry.add("spring.cloud.stream.binders.kafka.environment.spring.cloud.stream.kafka.streams.binder.brokers", kafkaContainer::getBootstrapServers);
+        registry.add("spring.cloud.stream.kafka.binder.brokers", kafkaContainer::getBootstrapServers);
     }
 
 }
