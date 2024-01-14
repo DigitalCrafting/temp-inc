@@ -59,7 +59,7 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
 
         List<Anomaly> anomalies = new ArrayList<>();
         for (TemperatureReading current : roomReadings) {
-            log.info("Processing reading: " + current);
+            log.info("[Quantitative detector] Processing reading: " + current);
             List<TemperatureReading> otherReadings = roomReadings.stream().filter(
                     r -> !r.equals(current)
             ).toList();
