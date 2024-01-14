@@ -1,7 +1,6 @@
 package io.kontakt.apps.anomaly.detector.timed;
 
 import io.kontakt.apps.anomaly.detector.archetype.AnomalyDetector;
-import io.kontakt.apps.anomaly.detector.storage.AnomaliesDatabaseService;
 import io.kontakt.apps.anomaly.detector.utils.AnomalyDetectorUtils;
 import io.kontakt.apps.event.Anomaly;
 import io.kontakt.apps.event.TemperatureReading;
@@ -24,7 +23,7 @@ public class TimedAnomalyDetector implements AnomalyDetector {
 
     public TimedAnomalyDetector(
             @Value("${io.kontakt.anomaly.detector.timed.temperatureDifference.threshold:5}")
-            double tempDiffThreshold, TimedRecentReadingsCache storage, AnomaliesDatabaseService databaseService) {
+            double tempDiffThreshold, TimedRecentReadingsCache storage) {
         this.tempDiffThreshold = tempDiffThreshold;
         this.storage = storage;
     }

@@ -1,7 +1,6 @@
 package io.kontakt.apps.anomaly.detector.quantitative;
 
 import io.kontakt.apps.anomaly.detector.archetype.AnomalyDetector;
-import io.kontakt.apps.anomaly.detector.storage.AnomaliesDatabaseService;
 import io.kontakt.apps.anomaly.detector.utils.AnomalyDetectorUtils;
 import io.kontakt.apps.event.Anomaly;
 import io.kontakt.apps.event.TemperatureReading;
@@ -28,8 +27,7 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
             double tempDiffThreshold,
             @Value("${io.kontakt.anomaly.detector.quantitative.storage.threshold:10}")
             int storageThreshold,
-            QuantitativeRecentReadingsCache storage,
-            AnomaliesDatabaseService databaseService) {
+            QuantitativeRecentReadingsCache storage) {
         this.tempDiffThreshold = tempDiffThreshold;
         this.storageThreshold = storageThreshold;
         this.storage = storage;
