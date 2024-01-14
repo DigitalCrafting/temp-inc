@@ -13,5 +13,7 @@ public interface AnomaliesMapper {
     List<AnomalyEntity> getByThermometerId(String roomId);
 
     List<String> getThermometersWithAnomaliesAboveThreshold(Integer threshold);
+
+    List<String> getRoomsWithAnomalies();
 }
 

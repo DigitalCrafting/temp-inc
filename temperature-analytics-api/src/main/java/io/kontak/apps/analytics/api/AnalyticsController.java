@@ -15,6 +15,12 @@ public class AnalyticsController {
     }
 
     @ResponseBody
+    @GetMapping("/rooms")
+    public List<String> getRoomsWithAnomalies() {
+        return service.getRoomsWithAnomalies();
+    }
+
+    @ResponseBody
     @GetMapping("/rooms/{roomId}")
     public List<Anomaly> getAnomaliesPerRoom(@PathVariable("roomId") final String roomId) {
         return service.getAnomaliesPerRoom(roomId);

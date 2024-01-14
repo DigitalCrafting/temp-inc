@@ -32,4 +32,8 @@ class AnalyticsControllerService {
     public List<String> getThermometerOverAnomalyThreshold(Integer threshold) {
         return mapper.getThermometersWithAnomaliesAboveThreshold(threshold);
     }
+
+    public List<String> getRoomsWithAnomalies() {
+        return mapper.getRoomsWithAnomalies();
+    }
 }

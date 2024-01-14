@@ -22,4 +22,8 @@
     <select id="getThermometersWithAnomaliesAboveThreshold" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT thermometerId FROM detected_anomalies group by thermometerId HAVING count(*) > #{threshold}
     </select>
+
+    <select id="getRoomsWithAnomalies" resultType="java.lang.String">
+        SELECT DISTINCT roomId FROM detected_anomalies
+    </select>
 </mapper>
