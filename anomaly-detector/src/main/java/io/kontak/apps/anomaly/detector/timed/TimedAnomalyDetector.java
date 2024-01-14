@@ -21,19 +21,16 @@ public class TimedAnomalyDetector implements AnomalyDetector {
 
     private final double tempDiffThreshold;
     private final TimedTempReadingsStorage storage;
-    private final AnomaliesDatabaseService databaseService;
 
     public TimedAnomalyDetector(
             @Value("${io.kontak.anomaly.detector.timed.temperatureDifference.threshold:5}")
             double tempDiffThreshold, TimedTempReadingsStorage storage, AnomaliesDatabaseService databaseService) {
         this.tempDiffThreshold = tempDiffThreshold;
         this.storage = storage;
-        this.databaseService = databaseService;
     }
 
     @Override
-    public Optional<Anomaly> apply(List<TemperatureReading> temperatureReadings) {
-        TemperatureReading reading = temperatureReadings.get(0);
+    public Optional<Anomaly> apply(TemperatureReading reading) {
         List<TemperatureReading> roomReadings = storage.push(reading);
         return detectAnomalies(roomReadings);
     }
@@ -62,7 +59,6 @@ public class TimedAnomalyDetector implements AnomalyDetector {
             potentialAnomaly.ifPresent(anomalies::add);
         }
         if (!anomalies.isEmpty()) {
-            anomalies.forEach(databaseService::saveAnomaly);
             return Optional.of(anomalies.get(0));
         }
         return Optional.empty();

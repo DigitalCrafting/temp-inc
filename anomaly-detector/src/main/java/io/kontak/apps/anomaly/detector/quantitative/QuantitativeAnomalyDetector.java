@@ -22,7 +22,6 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
     private final double tempDiffThreshold;
     private final int storageThreshold;
     private final QuantitativeTempReadingsStorage storage;
-    private final AnomaliesDatabaseService databaseService;
 
     public QuantitativeAnomalyDetector(
             @Value("${io.kontak.anomaly.detector.quantitative.temperatureDifference.threshold:5}")
@@ -34,12 +33,10 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
         this.tempDiffThreshold = tempDiffThreshold;
         this.storageThreshold = storageThreshold;
         this.storage = storage;
-        this.databaseService = databaseService;
     }
 
     @Override
-    public Optional<Anomaly> apply(List<TemperatureReading> temperatureReadings) {
-        TemperatureReading reading = temperatureReadings.get(0);
+    public Optional<Anomaly> apply(TemperatureReading reading) {
         List<TemperatureReading> roomReadings = storage.push(reading);
         return detectAnomalies(roomReadings);
     }
@@ -68,7 +65,6 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
             potentialAnomaly.ifPresent(anomalies::add);
         }
         if (!anomalies.isEmpty()) {
-            anomalies.forEach(databaseService::saveAnomaly);
             return Optional.of(anomalies.get(0));
         }
         return Optional.empty();
