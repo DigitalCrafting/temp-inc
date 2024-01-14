@@ -21,14 +21,14 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
 
     private final double tempDiffThreshold;
     private final int storageThreshold;
-    private final QuantitativeTempReadingsStorage storage;
+    private final QuantitativeRecentReadingsCache storage;
 
     public QuantitativeAnomalyDetector(
             @Value("${io.kontakt.anomaly.detector.quantitative.temperatureDifference.threshold:5}")
             double tempDiffThreshold,
             @Value("${io.kontakt.anomaly.detector.quantitative.storage.threshold:10}")
             int storageThreshold,
-            QuantitativeTempReadingsStorage storage,
+            QuantitativeRecentReadingsCache storage,
             AnomaliesDatabaseService databaseService) {
         this.tempDiffThreshold = tempDiffThreshold;
         this.storageThreshold = storageThreshold;

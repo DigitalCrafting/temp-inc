@@ -23,7 +23,7 @@ public class TimedAnomalyDetectorTest {
     void setUp() {
         AnomaliesDatabaseService databaseService = Mockito.mock(AnomaliesDatabaseService.class);
         doNothing().when(databaseService).saveAnomaly(any());
-        TimedTempReadingsStorage storage = new TimedTempReadingsStorage(5);
+        TimedRecentReadingsCache storage = new TimedRecentReadingsCache(5);
         detector = new TimedAnomalyDetector(5, storage, databaseService);
 
         TemperatureReading temperatureReading_1 = new TemperatureReading(20d, "room", "thermometer_1", Instant.parse("2023-01-01T00:00:00.000Z"));

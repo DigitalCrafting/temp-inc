@@ -1,6 +1,6 @@
 package io.kontakt.apps.anomaly.detector.quantitative;
 
-import io.kontakt.apps.anomaly.detector.archetype.TempReadingsStorage;
+import io.kontakt.apps.anomaly.detector.archetype.RecentReadingsCache;
 import io.kontakt.apps.event.TemperatureReading;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,13 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import java.time.Instant;
 import java.util.List;
 
-public class QuantitativeTempReadingsStorageTest {
+public class QuantitativeRecentReadingsCacheTest {
 
-    private TempReadingsStorage storage;
+    private RecentReadingsCache storage;
 
     @BeforeEach
     public void setUp() {
-        storage = new QuantitativeTempReadingsStorage(4);
+        storage = new QuantitativeRecentReadingsCache(4);
     }
 
     @Test

@@ -20,11 +20,11 @@ import java.util.Optional;
 public class TimedAnomalyDetector implements AnomalyDetector {
 
     private final double tempDiffThreshold;
-    private final TimedTempReadingsStorage storage;
+    private final TimedRecentReadingsCache storage;
 
     public TimedAnomalyDetector(
             @Value("${io.kontakt.anomaly.detector.timed.temperatureDifference.threshold:5}")
-            double tempDiffThreshold, TimedTempReadingsStorage storage, AnomaliesDatabaseService databaseService) {
+            double tempDiffThreshold, TimedRecentReadingsCache storage, AnomaliesDatabaseService databaseService) {
         this.tempDiffThreshold = tempDiffThreshold;
         this.storage = storage;
     }

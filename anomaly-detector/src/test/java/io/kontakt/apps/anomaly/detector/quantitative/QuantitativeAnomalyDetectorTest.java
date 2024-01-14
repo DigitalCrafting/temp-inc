@@ -24,7 +24,7 @@ public class QuantitativeAnomalyDetectorTest {
     void setUp() {
         AnomaliesDatabaseService databaseService = Mockito.mock(AnomaliesDatabaseService.class);
         doNothing().when(databaseService).saveAnomaly(any());
-        QuantitativeTempReadingsStorage storage = new QuantitativeTempReadingsStorage(5);
+        QuantitativeRecentReadingsCache storage = new QuantitativeRecentReadingsCache(5);
         detector = new QuantitativeAnomalyDetector(5, 5, storage, databaseService);
 
         TemperatureReading temperatureReading_1 = new TemperatureReading(20d, "room", "thermometer_1", Instant.parse("2023-01-01T00:00:00.000Z"));

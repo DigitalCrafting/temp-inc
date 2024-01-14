@@ -1,6 +1,6 @@
 package io.kontakt.apps.anomaly.detector.quantitative;
 
-import io.kontakt.apps.anomaly.detector.archetype.TempReadingsStorage;
+import io.kontakt.apps.anomaly.detector.archetype.RecentReadingsCache;
 import io.kontakt.apps.event.TemperatureReading;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,12 +18,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * no longer satisfying the criteria for storage.
  */
 @Component
-public class QuantitativeTempReadingsStorage implements TempReadingsStorage {
+public class QuantitativeRecentReadingsCache implements RecentReadingsCache {
 
     private final int threshold;
     private final Map<String, Deque<TemperatureReading>> readingsMap = new ConcurrentHashMap<>();
 
-    public QuantitativeTempReadingsStorage(@Value("${io.kontakt.anomaly.detector.quantitative.storage.threshold:10}")
+    public QuantitativeRecentReadingsCache(@Value("${io.kontakt.anomaly.detector.quantitative.storage.threshold:10}")
                                            int threshold) {
         this.threshold = threshold;
     }

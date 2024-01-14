@@ -11,6 +11,6 @@ import java.util.List;
  * hence there is no point in preserving all the reading in this application,
  * they will only be stored until the application is running.
  * */
-public interface TempReadingsStorage {
+public interface RecentReadingsCache {
     List<TemperatureReading> push(TemperatureReading reading);
 }

@@ -1,6 +1,6 @@
 package io.kontakt.apps.anomaly.detector.timed;
 
-import io.kontakt.apps.anomaly.detector.archetype.TempReadingsStorage;
+import io.kontakt.apps.anomaly.detector.archetype.RecentReadingsCache;
 import io.kontakt.apps.event.TemperatureReading;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -9,12 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import java.time.Instant;
 import java.util.List;
 
-public class TimedTempReadingsStorageTest {
-    private TempReadingsStorage storage;
+public class TimedRecentReadingsCacheTest {
+    private RecentReadingsCache storage;
 
     @BeforeEach
     public void setUp() {
-        storage = new TimedTempReadingsStorage(2);
+        storage = new TimedRecentReadingsCache(2);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TimedTempReadingsStorageTest {
 
     @Test
     public void should_correctlyRemoveMultiplePreviousReadings() {
-        storage = new TimedTempReadingsStorage(10);
+        storage = new TimedRecentReadingsCache(10);
         /* Expected to be evicted by the end */
         TemperatureReading temperatureReading_1 = new TemperatureReading(27d, "room", "thermometer_1", Instant.parse("2023-01-01T00:00:00.000Z"));
         TemperatureReading temperatureReading_2 = new TemperatureReading(27d, "room", "thermometer_2", Instant.parse("2023-01-01T00:00:01.000Z"));

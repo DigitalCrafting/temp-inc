@@ -1,6 +1,6 @@
 package io.kontakt.apps.anomaly.detector.timed;
 
-import io.kontakt.apps.anomaly.detector.archetype.TempReadingsStorage;
+import io.kontakt.apps.anomaly.detector.archetype.RecentReadingsCache;
 import io.kontakt.apps.event.TemperatureReading;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,12 +22,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * no longer satisfying the criteria for storage.
  */
 @Component
-public class TimedTempReadingsStorage implements TempReadingsStorage {
+public class TimedRecentReadingsCache implements RecentReadingsCache {
 
     private final long threshold;
     private final Map<String, Deque<TemperatureReading>> readingsMap = new ConcurrentHashMap<>();
 
-    public TimedTempReadingsStorage(@Value("${io.kontakt.anomaly.detector.timed.storage.threshold:10}")
+    public TimedRecentReadingsCache(@Value("${io.kontakt.anomaly.detector.timed.storage.threshold:10}")
                                     long threshold) {
         this.threshold = threshold;
     }
