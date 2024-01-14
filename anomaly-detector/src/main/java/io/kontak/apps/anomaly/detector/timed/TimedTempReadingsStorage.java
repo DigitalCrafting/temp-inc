@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,13 +37,11 @@ public class TimedTempReadingsStorage implements TempReadingsStorage {
         readingsMap.putIfAbsent(reading.roomId(), new ArrayDeque<>());
         Deque<TemperatureReading> roomReadings = readingsMap.get(reading.roomId());
         if (!roomReadings.isEmpty()) {
-            while (true) {
-                TemperatureReading headReading = roomReadings.peekFirst();
-                if (Duration.between(headReading.timestamp(), reading.timestamp()).getSeconds() > threshold) {
-                    roomReadings.pollFirst();
-                } else {
-                    break;
-                }
+            /* We take into account that there can be more readings to poll from queue */
+            TemperatureReading headReading = roomReadings.peekFirst();
+            while (roomReadings.peekFirst() != null && Duration.between(headReading.timestamp(), reading.timestamp()).getSeconds() > threshold) {
+                roomReadings.pollFirst();
+                headReading = roomReadings.peekFirst();
             }
         }
         roomReadings.add(reading);
