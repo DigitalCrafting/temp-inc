@@ -6,6 +6,7 @@ import io.kontak.apps.anomaly.detector.utils.AnomalyDetectorUtils;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Profile("quantitative")
 public class QuantitativeAnomalyDetector implements AnomalyDetector {
 
     private final double tempDiffThreshold;

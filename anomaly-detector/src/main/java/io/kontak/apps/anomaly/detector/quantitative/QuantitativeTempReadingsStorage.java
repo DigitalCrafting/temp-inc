@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Temporary storage for timed readings.
  * <p>
  * We have 2 storages, because timed and quantitative readings have different criteria
- * for how many if them we need.
+ * for how many of them we need.
  * <p>
  * This storage is basically an LRU cache, that will evict readings
  * no longer satisfying the criteria for storage.

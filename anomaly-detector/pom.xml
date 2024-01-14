@@ -11,6 +11,27 @@
 
     <artifactId>anomaly-detector</artifactId>
 
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>timed</id>
+            <properties>
+                <spring.profiles.active>timed</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>quantitative</id>
+            <properties>
+                <spring.profiles.active>quantitative</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>io.kontak.apps</groupId>

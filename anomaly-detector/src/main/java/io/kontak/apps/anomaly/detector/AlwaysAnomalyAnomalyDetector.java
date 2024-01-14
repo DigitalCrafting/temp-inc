@@ -4,13 +4,14 @@ import io.kontak.apps.anomaly.detector.archetype.AnomalyDetector;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@Primary
 @Component
+@Profile("default")
 public class AlwaysAnomalyAnomalyDetector implements AnomalyDetector {
     @Override
     public Optional<Anomaly> apply(List<TemperatureReading> temperatureReadings) {
