@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.kontak.apps</groupId>
+        <groupId>io.kontakt.apps</groupId>
         <artifactId>temp-inc</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -34,11 +34,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.kontak.apps</groupId>
+            <groupId>io.kontakt.apps</groupId>
             <artifactId>temperature-domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.kontak.apps</groupId>
+            <groupId>io.kontakt.apps</groupId>
             <artifactId>anomaly-storage</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

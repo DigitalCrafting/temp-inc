@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>io.kontak.apps</groupId>
+	<groupId>io.kontakt.apps</groupId>
 	<artifactId>temp-inc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -38,7 +38,7 @@
 		<dependencies>
 
 			<dependency>
-				<groupId>io.kontak.apps</groupId>
+				<groupId>io.kontakt.apps</groupId>
 				<artifactId>temperature-domain</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
