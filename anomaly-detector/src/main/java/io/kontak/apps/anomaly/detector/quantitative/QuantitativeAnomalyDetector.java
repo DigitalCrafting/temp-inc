@@ -5,6 +5,7 @@ import io.kontak.apps.anomaly.detector.storage.AnomaliesDatabaseService;
 import io.kontak.apps.anomaly.detector.utils.AnomalyDetectorUtils;
 import io.kontak.apps.event.Anomaly;
 import io.kontak.apps.event.TemperatureReading;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Log
 @Component
 @Profile("quantitative")
 public class QuantitativeAnomalyDetector implements AnomalyDetector {
@@ -57,6 +59,7 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
 
         List<Anomaly> anomalies = new ArrayList<>();
         for (TemperatureReading current : roomReadings) {
+            log.info("Processing reading: " + current);
             List<TemperatureReading> otherReadings = roomReadings.stream().filter(
                     r -> !r.equals(current)
             ).toList();

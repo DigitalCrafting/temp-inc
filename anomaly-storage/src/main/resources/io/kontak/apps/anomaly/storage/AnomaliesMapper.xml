@@ -19,7 +19,7 @@
         SELECT * FROM detected_anomalies WHERE thermometerId = #{thermometerId}
     </select>
 
-    <select id="getThermometersWithAnomaliesAboveThreshold" parameterType="java.lang.Integer" resultMap="java.lang.String">
+    <select id="getThermometersWithAnomaliesAboveThreshold" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT thermometerId FROM detected_anomalies group by thermometerId HAVING count(*) > #{threshold}
     </select>
 </mapper>
