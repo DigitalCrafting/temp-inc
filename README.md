@@ -3,9 +3,18 @@
 
 ## Assumptions
 
-1. It makes sense to divide measurements by roomId.
-2. We do not store all the measurements, only the anomalies.
-3. All the measurements are only stored as long as they are required to calculate the anomaly.
+1. We do not store all the measurements, only the anomalies.
+2. All the measurements are only stored as long as they are required to calculate the anomaly.
+3. Anomalies are detected in **all** readings, regardless of _roomId_ or _thermometerId_
+
+## Design choices
+1. Type of algorithm to use by `anomaly-detector` is determined by `profile`:
+  - `default` - AlwaysAnomalyDetector
+  - `quantitative` - Algorithm ONE
+  - `timed` - Algorithm TWO
+2. Database used is PostgreSql, it was added to `docker-compose.yaml` in `development` directory,
+3. Schema for database is defined in `anomaly-schema`, and uses `flyway` as a migration tool,
+4. Instead of using `spring-jpa`, I used [MyBatis](https://mybatis.org/mybatis-3/) simply because that's what I used the most in my career.
 
 ## How to run
 
