@@ -5,8 +5,9 @@ import io.kontakt.apps.event.TemperatureReading;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 
 /**
  * Temporary storage for timed readings.
@@ -21,23 +22,22 @@ import java.util.concurrent.ConcurrentHashMap;
 public class QuantitativeRecentReadingsCache implements RecentReadingsCache {
 
     private final int threshold;
-    private final Map<String, Deque<TemperatureReading>> readingsMap = new ConcurrentHashMap<>();
+    private final Deque<TemperatureReading> readings;
 
     public QuantitativeRecentReadingsCache(@Value("${io.kontakt.anomaly.detector.quantitative.storage.threshold:10}")
                                            int threshold) {
         this.threshold = threshold;
+        this.readings = new ArrayDeque<>(threshold);
     }
 
     @Override
     public synchronized List<TemperatureReading> push(TemperatureReading reading) {
-        readingsMap.putIfAbsent(reading.roomId(), new ArrayDeque<>());
-        Deque<TemperatureReading> roomReadings = readingsMap.get(reading.roomId());
-        if (!roomReadings.isEmpty()) {
-            if (roomReadings.size() >= threshold) {
-                roomReadings.poll();
+        if (!readings.isEmpty()) {
+            if (readings.size() >= threshold) {
+                readings.poll();
             }
         }
-        roomReadings.add(reading);
-        return roomReadings.stream().toList();
+        readings.add(reading);
+        return readings.stream().toList();
     }
 }
