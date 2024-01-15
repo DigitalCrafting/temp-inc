@@ -5,7 +5,7 @@
 
 1. We do not store all the measurements, only the anomalies.
 2. All the measurements are only stored as long as they are required to calculate the anomaly.
-3. Anomalies are detected in **all** readings, regardless of _roomId_ or _thermometerId_
+3. Anomalies are detected in **all** readings, regardless of _roomId_ or _thermometerId_.
 
 ## Design choices
 1. Type of algorithm to use by `anomaly-detector` is determined by `profile`:
@@ -21,7 +21,7 @@
 1. `mvn clean install` on the whole project
 2. Run `docker-compose up` in `development` directory
 3. Run `mvn flyway migrate` in `anomaly-schema`
-4. Run the services: temperature-generator, anomaly-detector (remember to set profile) and temperature-analytics-api
+4. Run the services: `temperature-generator`, `anomaly-detector` (remember to set `profile`) and `temperature-analytics-api`
 5. You can test temperature-analytics-api on http://localhost:8080/swagger-ui/index.html 
 
 ## Recruitment Task Description

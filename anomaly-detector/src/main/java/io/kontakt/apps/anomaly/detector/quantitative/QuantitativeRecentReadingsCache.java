@@ -28,6 +28,9 @@ public class QuantitativeRecentReadingsCache implements RecentReadingsCache {
         this.readings = new ArrayDeque<>(threshold);
     }
 
+    /**
+     * Since this cache is based on number of elements, we will always evict at most one.
+     * */
     @Override
     public synchronized Optional<Set<TemperatureReading>> add(TemperatureReading reading) {
         TemperatureReading evicted = null;

@@ -45,13 +45,11 @@ public class QuantitativeAnomalyDetector implements AnomalyDetector {
      * within any 10 consecutive measurements, one reading
      * is higher than the average of the remaining 9 by 5 degrees Celsius.
      * <p>
-     * recentReadingsCache takes care of the time window.
+     * recentReadingsCache takes care of the threshold.
      * <p>
      * detectedAnomaliesCache keeps track of already detected anomalies so that we do not detect something twice
      * <p>
      * There is no point in measuring average of less than 3 elements.
-     * <p>
-     * There will never be more than 10, storage takes care of that.
      */
     private Optional<List<Anomaly>> detectAnomalies(List<TemperatureReading> recentReadings) {
         if (recentReadings.size() < 3) {
