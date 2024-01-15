@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Component
 @Profile("default")
-public class AlwaysAnomalyAnomalyDetector implements AnomalyDetector {
+public class AlwaysAnomalyDetector implements AnomalyDetector {
     @Override
     public Optional<Anomaly> apply(TemperatureReading temperatureReading) {
         return Optional.of(new Anomaly(
