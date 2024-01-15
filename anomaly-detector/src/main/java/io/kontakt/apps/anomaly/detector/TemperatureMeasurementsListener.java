@@ -24,6 +24,7 @@ public class TemperatureMeasurementsListener implements Function<KStream<String,
                 .mapValues(anomalyDetector::apply)
                 .filter((s, anomaly) -> anomaly.isPresent())
                 .mapValues((s, anomaly) -> anomaly.get())
+                .flatMapValues((s, anomalies) -> anomalies)
                 .peek((s, anomaly) -> databaseService.saveAnomaly(anomaly))
                 .selectKey((s, anomaly) -> anomaly.thermometerId());
     }

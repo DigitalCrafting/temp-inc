@@ -1,6 +1,7 @@
 package io.kontakt.apps.anomaly.detector.quantitative;
 
 import io.kontakt.apps.anomaly.detector.archetype.AnomalyDetector;
+import io.kontakt.apps.anomaly.detector.storage.DetectedAnomaliesCache;
 import io.kontakt.apps.anomaly.detector.utils.AnomalyDetectorUtils;
 import io.kontakt.apps.event.Anomaly;
 import io.kontakt.apps.event.TemperatureReading;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Log
 @Component
@@ -19,51 +21,62 @@ import java.util.Optional;
 public class QuantitativeAnomalyDetector implements AnomalyDetector {
 
     private final double tempDiffThreshold;
-    private final int storageThreshold;
-    private final QuantitativeRecentReadingsCache storage;
+    private final QuantitativeRecentReadingsCache recentReadingsCache;
+    private final DetectedAnomaliesCache detectedAnomaliesCache;
 
     public QuantitativeAnomalyDetector(
             @Value("${io.kontakt.anomaly.detector.quantitative.temperatureDifference.threshold:5}")
             double tempDiffThreshold,
-            @Value("${io.kontakt.anomaly.detector.quantitative.storage.threshold:10}")
-            int storageThreshold,
-            QuantitativeRecentReadingsCache storage) {
+            QuantitativeRecentReadingsCache recentReadingsCache) {
         this.tempDiffThreshold = tempDiffThreshold;
-        this.storageThreshold = storageThreshold;
-        this.storage = storage;
+        this.recentReadingsCache = recentReadingsCache;
+        this.detectedAnomaliesCache = new DetectedAnomaliesCache();
     }
 
     @Override
-    public Optional<Anomaly> apply(TemperatureReading reading) {
-        List<TemperatureReading> roomReadings = storage.push(reading);
-        return detectAnomalies(roomReadings);
+    public Optional<List<Anomaly>> apply(TemperatureReading reading) {
+        Optional<Set<TemperatureReading>> evicted = recentReadingsCache.add(reading);
+        detectedAnomaliesCache.evict(evicted);
+        List<TemperatureReading> recentReadings = recentReadingsCache.get();
+        return detectAnomalies(recentReadings);
     }
 
     /**
      * within any 10 consecutive measurements, one reading
      * is higher than the average of the remaining 9 by 5 degrees Celsius.
      * <p>
-     * When there is less than 10 readings, we do nothing.
+     * recentReadingsCache takes care of the time window.
+     * <p>
+     * detectedAnomaliesCache keeps track of already detected anomalies so that we do not detect something twice
+     * <p>
+     * There is no point in measuring average of less than 3 elements.
      * <p>
      * There will never be more than 10, storage takes care of that.
      */
-    private Optional<Anomaly> detectAnomalies(List<TemperatureReading> roomReadings) {
-        if (roomReadings.size() < storageThreshold) {
+    private Optional<List<Anomaly>> detectAnomalies(List<TemperatureReading> recentReadings) {
+        if (recentReadings.size() < 3) {
             return Optional.empty();
         }
 
         List<Anomaly> anomalies = new ArrayList<>();
-        for (TemperatureReading current : roomReadings) {
+        for (TemperatureReading current : recentReadings) {
+            if (detectedAnomaliesCache.contains(current)) {
+                continue;
+            }
+
             log.info("[Quantitative detector] Processing reading: " + current);
-            List<TemperatureReading> otherReadings = roomReadings.stream().filter(
+            List<TemperatureReading> otherReadings = recentReadings.stream().filter(
                     r -> !r.equals(current)
             ).toList();
 
             Optional<Anomaly> potentialAnomaly = AnomalyDetectorUtils.isAnomaly(current, otherReadings, tempDiffThreshold);
-            potentialAnomaly.ifPresent(anomalies::add);
+            if (potentialAnomaly.isPresent()) {
+                anomalies.add(potentialAnomaly.get());
+                detectedAnomaliesCache.add(current);
+            }
         }
         if (!anomalies.isEmpty()) {
-            return Optional.of(anomalies.get(0));
+            return Optional.of(anomalies);
         }
         return Optional.empty();
     }

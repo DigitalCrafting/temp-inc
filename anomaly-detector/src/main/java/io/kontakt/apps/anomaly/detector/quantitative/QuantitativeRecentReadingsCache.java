@@ -5,9 +5,7 @@ import io.kontakt.apps.event.TemperatureReading;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 /**
  * Temporary storage for timed readings.
@@ -31,13 +29,22 @@ public class QuantitativeRecentReadingsCache implements RecentReadingsCache {
     }
 
     @Override
-    public synchronized List<TemperatureReading> push(TemperatureReading reading) {
+    public synchronized Optional<Set<TemperatureReading>> add(TemperatureReading reading) {
+        TemperatureReading evicted = null;
         if (!readings.isEmpty()) {
             if (readings.size() >= threshold) {
-                readings.poll();
+                evicted = readings.poll();
             }
         }
         readings.add(reading);
+        if (evicted != null) {
+            return Optional.of(Set.of(evicted));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<TemperatureReading> get() {
         return readings.stream().toList();
     }
 }

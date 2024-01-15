@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Temporary storage for timed readings.
@@ -32,16 +29,25 @@ public class TimedRecentReadingsCache implements RecentReadingsCache {
     }
 
     @Override
-    public synchronized List<TemperatureReading> push(TemperatureReading reading) {
+    public synchronized Optional<Set<TemperatureReading>> add(TemperatureReading reading) {
+        Set<TemperatureReading> evicted = new HashSet<>();
         if (!readings.isEmpty()) {
             /* We take into account that there can be more readings to poll from queue */
             TemperatureReading headReading = readings.peekFirst();
             while (readings.peekFirst() != null && Duration.between(headReading.timestamp(), reading.timestamp()).getSeconds() > threshold) {
-                readings.pollFirst();
+                evicted.add(readings.pollFirst());
                 headReading = readings.peekFirst();
             }
         }
         readings.add(reading);
+        if (!evicted.isEmpty()) {
+            return Optional.of(evicted);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<TemperatureReading> get() {
         return readings.stream().toList();
     }
 }
